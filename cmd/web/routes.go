@@ -2,7 +2,7 @@ package main
 
 import "net/http"
 
-func (app *application) routes() *http.ServeMux {
+func (app *application) routes() http.Handler {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/", app.home)
@@ -12,5 +12,5 @@ func (app *application) routes() *http.ServeMux {
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	router.Handle("/static/", http.StripPrefix("/static", fileServer))
 
-	return router
+	return app.recoverPanic(app.logRequest(secureHeaders(router)))
 }

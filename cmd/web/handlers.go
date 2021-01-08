@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"module1/pkg/models"
 	"net/http"
 	"strconv"
@@ -20,25 +19,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
-	for _, snippet := range s {
-		fmt.Fprintf(w, "%v\n", snippet)
-	}
-
-	files := []string{
-		"./ui/html/home.page.gohtml",
-		"./ui/html/base.layout.gohtml",
-		"./ui/html/footer.partial.gohtml",
-	}
-
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-	err = ts.Execute(w, nil)
-	if err != nil {
-		app.serverError(w, err)
-	}
+	app.render(w, r, "home.page.gohtml", &templateData{Snippets: s,})
 }
 
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +39,8 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "%v", s)
+	app.render(w, r, "show.page.gohtml", &templateData{Snippet: s,})
+
 }
 
 func (app *application) create(w http.ResponseWriter, r *http.Request)  {
@@ -68,9 +50,9 @@ func (app *application) create(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 
-	title := "O snail"
-	content := "O snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n– Kobayashi Issa"
-	expires := "14"
+	title := "Test"
+	content := "test test test"
+	expires := 21
 
 	id ,err := app.snippets.Insert(title, content, expires)
 	if err != nil {
