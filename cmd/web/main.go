@@ -5,7 +5,7 @@ import (
 	"github.com/jackc/pgx"
 	"html/template"
 	"log"
-	"module1/pkg/postgre"
+	"module1/pkg/models/postgre"
 	"net/http"
 	"os"
 )

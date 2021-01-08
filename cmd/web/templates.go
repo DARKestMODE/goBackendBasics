@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"module1/pkg/forms"
 	"module1/pkg/models"
 	"path/filepath"
 	"time"
@@ -9,6 +10,7 @@ import (
 
 type templateData struct {
 	CurrentYear int
+	Form *forms.Form
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
 }

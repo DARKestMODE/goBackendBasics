@@ -1,16 +1,20 @@
 package main
 
-import "net/http"
+import (
+	"github.com/bmizerany/pat"
+	"net/http"
+)
 
 func (app *application) routes() http.Handler {
-	router := http.NewServeMux()
+	router := pat.New()
 
-	router.HandleFunc("/", app.home)
-	router.HandleFunc("/snippet", app.showSnippet)
-	router.HandleFunc("/snippet/create", app.create)
+	router.Get("/", http.HandlerFunc(app.home))
+	router.Get("/snippet/create", http.HandlerFunc(app.createSnippetForm))
+	router.Post("/snippet/create", http.HandlerFunc(app.create))
+	router.Get("/snippet/:id", http.HandlerFunc(app.showSnippet))
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
-	router.Handle("/static/", http.StripPrefix("/static", fileServer))
+	router.Get("/static/", http.StripPrefix("/static", fileServer))
 
 	return app.recoverPanic(app.logRequest(secureHeaders(router)))
 }
