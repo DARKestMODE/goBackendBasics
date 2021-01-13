@@ -28,7 +28,7 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 	s, err := app.snippets.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
-			app.notFound(w)
+			app.render(w, r, "notfound.page.gohtml", nil)
 		} else {
 			app.serverError(w, err)
 		}
@@ -66,5 +66,7 @@ func (app *application) create(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 
-	http.Redirect(w, r, fmt.Sprintf("/snippet?id=%d", id), http.StatusSeeOther)
+	app.session.Put(r, "flash", "Snippet successfully created!")
+
+	http.Redirect(w, r, fmt.Sprintf("/snippet/%d", id), http.StatusSeeOther)
 }

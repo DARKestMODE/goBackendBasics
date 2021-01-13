@@ -1,8 +1,6 @@
 package postgre
 
 import (
-	"database/sql"
-	"errors"
 	"github.com/jackc/pgx"
 	"module1/pkg/models"
 	"time"
@@ -31,7 +29,7 @@ func (m *SnippetModel) Get(id int) (*models.Snippet, error) {
 	err := m.Conn.QueryRow(stmt, id).Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
 
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
+		if err.Error() == "no rows in result set" {
 			return nil, models.ErrNoRecord
 		} else {
 			return nil, err
