@@ -29,11 +29,11 @@ func main() {
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	config := pgx.ConnConfig{
-		Host:     "localhost",
+		Host:     "db",
 		Port:     5432,
-		Database: "golang",
-		User:     "golang_user",
-		Password: "1golang1",
+		Database: "postgres",
+		User:     "postgres",
+		Password: "postgres",
 	}
 
 	conn, err := pgx.Connect(config)
@@ -64,7 +64,7 @@ func main() {
 		Handler:  app.routes(),
 	}
 
-	infoLog.Printf("Starting server on %s", *addr)
+	infoLog.Printf("Starting server on port %s", *addr)
 	err = server.ListenAndServe()
 	errorLog.Fatal(err)
 }

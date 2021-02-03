@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  db:
+    build: ./pkg
+    restart: always
+    container_name: postgres
+    ports:
+    - 5432:5432
+  main_app:
+    build: .
+    depends_on:
+      - db
+    restart: always
+    container_name: main-app
+    ports:
+    - 8000:8000
