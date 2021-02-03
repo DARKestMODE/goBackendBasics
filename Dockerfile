@@ -1,4 +1,4 @@
-FROM golang:1.16rc1-buster
+FROM golang
 
 RUN mkdir -p /usr/src/GoWebProject/
 WORKDIR /usr/src/GoWebProject/
